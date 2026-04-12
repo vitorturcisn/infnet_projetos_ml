@@ -1,0 +1,16 @@
+# Ambientes virtuais
+venv/
+secrets.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# MLflow e Dados (Geralmente não subimos bancos locais pesados)
+mlruns/
+mlruns.db
+data/*.parquet
+data/*.csv
+
+# Streamlit
+.streamlit/

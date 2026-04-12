@@ -1,0 +1,100 @@
+# eda.yaml — Configurações para o seu laboratório de dados
+version: "1.0.0"
+name: "cardiac-risk-eda"
+random_seed: 42
+
+target: "Heart Disease Status"
+
+features:
+  numerical:
+    - "Age"
+    - "Blood Pressure"
+    - "Cholesterol Level"
+    - "BMI"
+    - "Sleep Hours"
+    - "Triglyceride Level"
+    - "Fasting Blood Sugar"
+    - "CRP Level"
+    - "Homocysteine Level"
+  categorical:
+    - "Gender"
+    - "Exercise Habits"
+    - "Smoking"
+    - "Family Heart Disease"
+    - "Diabetes"
+    - "High Blood Pressure"
+    - "Low HDL Cholesterol"
+    - "High LDL Cholesterol"
+    - "Alcohol Consumption"
+    - "Stress Level"
+    - "Sugar Consumption"
+
+paths:
+  input_data: "data/processed/heart_disease.parquet"
+  figures_dir: "outputs/figures"
+  stats_dir: "outputs/stats"
+  tables_dir: "outputs/tables"
+
+descriptive:
+  percentiles: [0.25, 0.5, 0.75, 0.95]
+  skewness_threshold: 0.5
+  missing_threshold: 0.05
+
+feature_engineering:
+  ratio_features:
+    cholesterol_bmi_ratio:
+      numerator: "Cholesterol Level"
+      denominator: "BMI"
+    triglyceride_age_index:
+      numerator: "Triglyceride Level"
+      denominator: "Age"
+  log_features:
+    - "Triglyceride Level"
+    - "CRP Level"
+    - "Homocysteine Level"
+    - "Fasting Blood Sugar"
+  polynomial:
+    features: ["Age", "BMI"]
+
+interactions:
+  interaction_bins: 4
+  two_way:
+    - ["Age", "BMI"]
+    - ["Smoking", "Diabetes"]
+    - ["Cholesterol Level", "Blood Pressure"]
+  three_way:
+    - ["Age", "Smoking", "Gender"]
+
+pivot_tables:
+  bins:
+    age:
+      cuts: [0, 30, 45, 60, 120]
+      labels: ["Jovem", "Adulto", "Meia-Idade", "Sênior"]
+    bmi:
+      cuts: [0, 18.5, 25, 30, 100]
+      labels: ["Abaixo do Peso", "Normal", "Sobrepeso", "Obeso"]
+    blood_pressure:
+      cuts: [0, 120, 140, 250]
+      labels: ["Normal", "Elevada", "Hipertensão"]
+  group_by: ["Gender", "Exercise Habits", "Smoking"]
+
+statistical_tests:
+  alpha: 0.05
+  normality_sample_size: 5000
+  chi2_pairs:
+    - ["Smoking", "Heart Disease Status"]
+    - ["Gender", "Heart Disease Status"]
+    - ["Diabetes", "Heart Disease Status"]
+
+visualizations:
+  figure_dpi: 120
+  figure_size_default: [10, 6]
+  figure_size_large: [14, 10]
+  palette: "viridis"
+  style: "whitegrid"
+  histogram:
+    bins: 30
+  correlation:
+    method: "pearson"
+    annot: true
+    fmt: ".2f"

@@ -1,0 +1,124 @@
+# modeling.yaml — Arena de Modelos Preditores (Risco Cardíaco)
+# ─────────────────────────────────────────────────────────────────────────────
+
+pipeline:
+  # O global_imputer inserido no model_factory.py cuidará de todos os NaNs.
+  # Não é necessário listar colunas individualmente aqui.
+  imputation: [] 
+
+  scaling:
+    columns:
+      - "Age"
+      - "BMI"
+      - "log_Triglyceride Level"
+      - "cholesterol_bmi_ratio"
+      - "triglyceride_age_index"
+      - "age_x_bmi"
+      - "Stress Level_encoded"
+
+# ── Configuração Geral do Experimento ─────────────────────────────────────────
+modeling:
+  experiment_name: "cardiac-risk-arena"
+  tracking_uri: "sqlite:///mlruns.db"
+  registry_name: "cardiac-risk-best"
+  random_seed: 42
+
+# ── Estratégia de Busca ───────────────────────────────────────────────────────
+optimizer:
+  strategy: "optuna"
+  optuna:
+    default_trials: 10
+    sampler: "tpe"
+
+# ── Redução de Features ───────────────────────────────────────────────────────
+feature_reduction:
+  method: "none"
+  search_space:
+    method:
+      type: "categorical"
+      choices: ["none"]
+
+# ── Métricas de Avaliação (Classificação) ─────────────────────────────────────
+metrics:
+  primary: "roc_auc"
+  additional: ["recall", "f1", "precision", "accuracy"]
+
+# ── Divisão de Dados ──────────────────────────────────────────────────────────
+holdout:
+  test_size: 0.20
+  stratify_bins: 2 # Garante proporção de classes no alvo (0/1)
+
+cv:
+  strategy: "stratified_kfold"
+  n_splits: 5
+  shuffle: true
+
+# ── A ARENA DE MODELOS ────────────────────────────────────────────────────────
+models:
+
+  # 1. Regressão Logística (Baseline Linear)
+  logistic_regression:
+    enabled: true
+    module: "sklearn.linear_model"
+    class: "LogisticRegression"
+    default_params:
+      max_iter: 1000
+    search_space:
+      C: { type: "log_float", low: 1.0e-4, high: 1.0e2 }
+
+  # 2. Random Forest (Ensemble de Árvores Clássico)
+  random_forest:
+    enabled: true
+    module: "sklearn.ensemble"
+    class: "RandomForestClassifier"
+    default_params:
+      n_estimators: 100
+      n_jobs: -1
+    search_space:
+      max_depth: { type: "int", low: 5, high: 20 }
+      min_samples_split: { type: "int", low: 2, high: 10 }
+
+  # 3. XGBoost (Gradient Boosting Otimizado)
+  xgboost:
+    enabled: true
+    module: "xgboost"
+    class: "XGBClassifier"
+    default_params:
+      n_estimators: 100
+      verbosity: 0
+      n_jobs: -1
+      eval_metric: "logloss"
+    search_space:
+      max_depth: { type: "int", low: 3, high: 9 }
+      learning_rate: { type: "log_float", low: 0.01, high: 0.2 }
+
+  # 4. LightGBM (Boosting de Alta Performance)
+  lightgbm:
+    enabled: true
+    module: "lightgbm"
+    class: "LGBMClassifier"
+    default_params:
+      n_estimators: 100
+      verbosity: -1
+      n_jobs: -1
+    search_space:
+      num_leaves: { type: "int", low: 20, high: 100 }
+      learning_rate: { type: "log_float", low: 0.01, high: 0.2 }
+
+# ── Ensembles (Combinação dos Melhores) ───────────────────────────────────────
+ensembles:
+  top_n_base_models: 2
+  voting:
+    enabled: true
+    weight_low: 1
+    weight_high: 5
+
+# ── Artefatos e Gráficos ──────────────────────────────────────────────────────
+artifacts:
+  output_dir: "outputs/modeling"
+  save_plots: true
+  plots: 
+    - "confusion_matrix"
+    - "roc_curve"
+    - "feature_importance"
+    - "optuna_optimization_history"

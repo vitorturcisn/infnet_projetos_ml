@@ -1,0 +1,39 @@
+# data.yaml — Configuração para o dataset de Risco Cardíaco (21 colunas)
+
+kaggle:
+  dataset: "oktayrdeki/heart-disease"
+  file_pattern: "*.csv"
+  expected_files: ["heart_disease.csv"]
+  expected_count: 1
+
+ingest:
+  output_format: "parquet"
+  compression: "snappy"
+  chunk_size_rows: 10000
+  convert_dtypes: true
+  validate_schema: true
+
+schema:
+  # O contrato de dados: todas as 21 colunas identificadas na amostra
+  required_columns:
+    - "Age"
+    - "Gender"
+    - "Blood Pressure"
+    - "Cholesterol Level"
+    - "Exercise Habits"
+    - "Smoking"
+    - "Family Heart Disease"
+    - "Diabetes"
+    - "BMI"
+    - "High Blood Pressure"
+    - "Low HDL Cholesterol"
+    - "High LDL Cholesterol"
+    - "Alcohol Consumption"
+    - "Stress Level"
+    - "Sleep Hours"
+    - "Sugar Consumption"
+    - "Triglyceride Level"
+    - "Fasting Blood Sugar"
+    - "CRP Level"
+    - "Homocysteine Level"
+    - "Heart Disease Status"

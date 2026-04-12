@@ -1,0 +1,11 @@
+Age,Gender,Blood Pressure,Cholesterol Level,Exercise Habits,Smoking,Family Heart Disease,Diabetes,BMI,High Blood Pressure,Low HDL Cholesterol,High LDL Cholesterol,Alcohol Consumption,Stress Level,Sleep Hours,Sugar Consumption,Triglyceride Level,Fasting Blood Sugar,CRP Level,Homocysteine Level,Heart Disease Status,age_category,bmi_category,bp_category,target_numeric
+41.0,Female,170.0,300.0,Low,No,No,No,20.661063756249106,No,Yes,Yes,None,Low,6.438115869006369,Low,317.0,116.0,1.7393246348489328,14.225835618089238,No,Adulto,Normal,Hipertensão,0
+77.0,Male,171.0,300.0,Medium,No,Yes,Yes,35.970642888331675,No,Yes,Yes,High,High,7.135708574905066,Low,176.0,101.0,6.460138408085357,11.933399609410142,No,Sênior,Obeso,Hipertensão,0
+75.0,Female,122.0,300.0,High,Yes,Yes,No,37.37568818779859,Yes,Yes,Yes,Low,High,9.093322707315577,Medium,146.0,133.0,9.085062656294557,7.471385308616235,No,Sênior,Obeso,Elevada,0
+40.0,Male,126.0,300.0,High,No,No,No,33.65245125404543,Yes,No,Yes,None,Low,8.541125340783921,Low,189.0,145.0,1.2627243882254362,9.034320294450152,No,Adulto,Obeso,Elevada,0
+30.0,Female,168.0,300.0,Medium,Yes,No,Yes,36.05179567997423,No,Yes,Yes,Medium,High,7.5180849617332015,Medium,,115.0,9.876693196127949,8.401221161743331,No,Jovem,Obeso,Hipertensão,0
+29.0,Female,150.0,300.0,High,Yes,No,Yes,31.165691691250345,Yes,Yes,Yes,High,Low,9.03415338052493,High,377.0,95.0,12.874060016710622,17.163834199975206,No,Jovem,Obeso,Hipertensão,0
+46.0,Male,143.0,300.0,Low,No,Yes,Yes,32.23550351492374,No,Yes,No,None,High,4.236183636549187,High,215.0,136.0,13.105688511055678,8.332648881839097,No,Meia-Idade,Obeso,Hipertensão,0
+68.0,Male,121.0,300.0,Medium,No,Yes,Yes,29.273594575833588,Yes,Yes,No,Medium,Low,9.695493302975347,Medium,146.0,118.0,4.779321850484997,18.185807029113423,No,Sênior,Sobrepeso,Elevada,0
+40.0,Male,144.0,300.0,Medium,No,No,No,36.71393477467049,No,No,Yes,Low,Medium,4.522171044979913,High,222.0,117.0,8.991272216484434,13.383521979687863,No,Adulto,Obeso,Hipertensão,0
+45.0,Male,154.0,300.0,High,Yes,No,Yes,20.1250807960991,Yes,Yes,Yes,High,Low,7.264513555112339,High,374.0,92.0,5.107951328289097,8.180421518664428,No,Adulto,Normal,Hipertensão,0

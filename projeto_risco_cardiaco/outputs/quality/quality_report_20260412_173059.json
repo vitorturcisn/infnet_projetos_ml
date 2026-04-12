@@ -1,0 +1,369 @@
+{
+  "success": true,
+  "total": 25,
+  "passed": 25,
+  "failed": 0,
+  "details": [
+    {
+      "type": null,
+      "column": null,
+      "success": true,
+      "kwargs": {
+        "min_value": 5000,
+        "max_value": 15000
+      },
+      "result": {
+        "observed_value": 10000
+      }
+    },
+    {
+      "type": null,
+      "column": null,
+      "success": true,
+      "kwargs": {
+        "column_set": [
+          "Age",
+          "Gender",
+          "Blood Pressure",
+          "Cholesterol Level",
+          "Exercise Habits",
+          "Smoking",
+          "Family Heart Disease",
+          "Diabetes",
+          "BMI",
+          "High Blood Pressure",
+          "Low HDL Cholesterol",
+          "High LDL Cholesterol",
+          "Alcohol Consumption",
+          "Stress Level",
+          "Sleep Hours",
+          "Sugar Consumption",
+          "Triglyceride Level",
+          "Fasting Blood Sugar",
+          "CRP Level",
+          "Homocysteine Level",
+          "Heart Disease Status"
+        ],
+        "exact_match": true
+      },
+      "result": {
+        "missing": [],
+        "unexpected": []
+      }
+    },
+    {
+      "type": null,
+      "column": "Heart Disease Status",
+      "success": "True",
+      "kwargs": {},
+      "result": {
+        "fill_rate": 1.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Heart Disease Status",
+      "success": "True",
+      "kwargs": {
+        "value_set": [
+          "Yes",
+          "No"
+        ]
+      },
+      "result": {
+        "success_rate": 1.0,
+        "unique_obs": [
+          "No",
+          "Yes"
+        ]
+      }
+    },
+    {
+      "type": null,
+      "column": "Age",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 0.9971
+      }
+    },
+    {
+      "type": null,
+      "column": "Age",
+      "success": "True",
+      "kwargs": {
+        "min_value": 18,
+        "max_value": 100
+      },
+      "result": {
+        "success_rate": 1.0,
+        "min_obs": 18.0,
+        "max_obs": 80.0
+      }
+    },
+    {
+      "type": null,
+      "column": "BMI",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 0.9978
+      }
+    },
+    {
+      "type": null,
+      "column": "BMI",
+      "success": "True",
+      "kwargs": {
+        "min_value": 10.0,
+        "max_value": 60.0
+      },
+      "result": {
+        "success_rate": 1.0,
+        "min_obs": 18.00283694367505,
+        "max_obs": 39.99695379658124
+      }
+    },
+    {
+      "type": null,
+      "column": "Blood Pressure",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 0.9981
+      }
+    },
+    {
+      "type": null,
+      "column": "Blood Pressure",
+      "success": "True",
+      "kwargs": {
+        "min_value": 70,
+        "max_value": 250
+      },
+      "result": {
+        "success_rate": 1.0,
+        "min_obs": 120.0,
+        "max_obs": 180.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Cholesterol Level",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 0.997
+      }
+    },
+    {
+      "type": null,
+      "column": "Cholesterol Level",
+      "success": "True",
+      "kwargs": {
+        "min_value": 100,
+        "max_value": 500
+      },
+      "result": {
+        "success_rate": 1.0,
+        "min_obs": 150.0,
+        "max_obs": 300.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Triglyceride Level",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 0.9974
+      }
+    },
+    {
+      "type": null,
+      "column": "Triglyceride Level",
+      "success": "True",
+      "kwargs": {
+        "min_value": 50,
+        "max_value": 800
+      },
+      "result": {
+        "success_rate": 1.0,
+        "min_obs": 100.0,
+        "max_obs": 400.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Sleep Hours",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 0.9975
+      }
+    },
+    {
+      "type": null,
+      "column": "Sleep Hours",
+      "success": "True",
+      "kwargs": {
+        "min_value": 0.0,
+        "max_value": 24.0
+      },
+      "result": {
+        "success_rate": 1.0,
+        "min_obs": 4.000605495703501,
+        "max_obs": 9.999952253817796
+      }
+    },
+    {
+      "type": null,
+      "column": "Gender",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 1.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Gender",
+      "success": "True",
+      "kwargs": {
+        "value_set": [
+          "Male",
+          "Female"
+        ],
+        "mostly": 0.99
+      },
+      "result": {
+        "success_rate": 0.9981,
+        "unique_obs": [
+          "Male",
+          "Female",
+          ""
+        ]
+      }
+    },
+    {
+      "type": null,
+      "column": "Smoking",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 1.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Smoking",
+      "success": "True",
+      "kwargs": {
+        "value_set": [
+          "Yes",
+          "No"
+        ],
+        "mostly": 0.99
+      },
+      "result": {
+        "success_rate": 0.9975,
+        "unique_obs": [
+          "Yes",
+          "No",
+          ""
+        ]
+      }
+    },
+    {
+      "type": null,
+      "column": "Diabetes",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 1.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Diabetes",
+      "success": "True",
+      "kwargs": {
+        "value_set": [
+          "Yes",
+          "No"
+        ],
+        "mostly": 0.99
+      },
+      "result": {
+        "success_rate": 0.997,
+        "unique_obs": [
+          "No",
+          "Yes",
+          ""
+        ]
+      }
+    },
+    {
+      "type": null,
+      "column": "Stress Level",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.99
+      },
+      "result": {
+        "fill_rate": 1.0
+      }
+    },
+    {
+      "type": null,
+      "column": "Stress Level",
+      "success": "True",
+      "kwargs": {
+        "value_set": [
+          "Low",
+          "Medium",
+          "High"
+        ],
+        "mostly": 0.99
+      },
+      "result": {
+        "success_rate": 0.9978,
+        "unique_obs": [
+          "Medium",
+          "High",
+          "Low",
+          ""
+        ]
+      }
+    },
+    {
+      "type": null,
+      "column": "Alcohol Consumption",
+      "success": "True",
+      "kwargs": {
+        "mostly": 0.7
+      },
+      "result": {
+        "fill_rate": 1.0
+      }
+    }
+  ]
+}

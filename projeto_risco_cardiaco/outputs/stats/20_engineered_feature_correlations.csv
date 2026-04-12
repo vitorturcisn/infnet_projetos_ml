@@ -1,0 +1,28 @@
+,target_numeric
+target_numeric,1.0
+BMI,0.019695214064669505
+Gender_encoded,0.014291864099139191
+Sugar Consumption_encoded,0.012829668373032115
+triglyceride_age_index,0.011383728139603044
+Family Heart Disease_encoded,0.00882653635420299
+Homocysteine Level,0.00830138007050475
+log_Homocysteine Level,0.0076456200893977285
+High LDL Cholesterol_encoded,0.006928329920896101
+Low HDL Cholesterol_encoded,0.003960638709441547
+Triglyceride Level,0.0029205510291600103
+Cholesterol Level,0.002709797547695616
+log_Triglyceride Level,0.0021221300379770185
+Exercise Habits_encoded,0.00121232250331181
+log_Fasting Blood Sugar,-0.0016443696332164256
+Smoking_encoded,-0.001683567891859363
+Fasting Blood Sugar,-0.00224739854077525
+log_CRP Level,-0.0023086861233840073
+High Blood Pressure_encoded,-0.002375423492041859
+Diabetes_encoded,-0.0026681792800319092
+Sleep Hours,-0.003818575689257169
+CRP Level,-0.006019526310875595
+Age,-0.009248831282063972
+Alcohol Consumption_encoded,-0.011605193686874484
+Blood Pressure,-0.013890496048388877
+cholesterol_bmi_ratio,-0.015283969774418827
+Stress Level_encoded,-0.02832656053746393
