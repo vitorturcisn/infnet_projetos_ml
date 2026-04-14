@@ -1,37 +1,39 @@
 {
-  "best_model": "logistic_regression",
-  "best_run_id": "541b5019a7f3488fbb99d76079ef2ea8",
-  "cv_roc_auc_mean": 0.5314,
-  "cv_roc_auc_std": 0.0187,
-  "holdout_roc_auc": 0.487,
-  "holdout_recall": 0.0,
+  "projeto": "Risco Cardíaco - Triagem Agressiva",
+  "best_model": "voting",
+  "best_run_id": "adc3ec7be2b048ba909cbb69c73ff5e7",
+  "cv_roc_auc_mean": 0.5324,
+  "holdout_roc_auc": 0.4861,
+  "holdout_recall": 0.3575,
+  "reducer_used": "ensemble_hybrid",
   "best_params": {
-    "C": "0.0008629132190071859"
+    "w_logistic_regression": 5,
+    "w_random_forest": 2
   },
-  "top_base_models": [
-    "logistic_regression",
-    "random_forest"
+  "top_models": [
+    "voting",
+    "logistic_regression"
   ],
-  "all_models_ranked": [
+  "ranking": [
+    {
+      "modelo": "voting",
+      "cv_roc_auc": 0.53236279296875
+    },
     {
       "modelo": "logistic_regression",
-      "cv_roc_auc": 0.531427734375
+      "cv_roc_auc": 0.5284169921874999
     },
     {
       "modelo": "random_forest",
-      "cv_roc_auc": 0.5190380859375001
+      "cv_roc_auc": 0.5283154296875001
     },
     {
       "modelo": "xgboost",
-      "cv_roc_auc": 0.51765478515625
-    },
-    {
-      "modelo": "voting",
-      "cv_roc_auc": 0.516345703125
+      "cv_roc_auc": 0.5223759765624999
     },
     {
       "modelo": "lightgbm",
-      "cv_roc_auc": 0.5126799316406249
+      "cv_roc_auc": 0.52235693359375
     }
   ]
 }

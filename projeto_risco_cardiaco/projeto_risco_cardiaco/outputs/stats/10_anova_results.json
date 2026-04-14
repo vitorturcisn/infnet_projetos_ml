@@ -1,0 +1,56 @@
+[
+  {
+    "feature": "Age",
+    "f_stat": 0.8528299853856534,
+    "p_value": 0.3557753304234788,
+    "significant": false
+  },
+  {
+    "feature": "Blood Pressure",
+    "f_stat": 1.9257785122451976,
+    "p_value": 0.16525202264503197,
+    "significant": false
+  },
+  {
+    "feature": "Cholesterol Level",
+    "f_stat": 0.07319558888254021,
+    "p_value": 0.7867451935131726,
+    "significant": false
+  },
+  {
+    "feature": "BMI",
+    "f_stat": 3.87120658223427,
+    "p_value": 0.049148857774150366,
+    "significant": true
+  },
+  {
+    "feature": "Sleep Hours",
+    "f_stat": 0.14542362239581105,
+    "p_value": 0.7029557664114209,
+    "significant": false
+  },
+  {
+    "feature": "Triglyceride Level",
+    "f_stat": 0.08505807933942414,
+    "p_value": 0.770562462540839,
+    "significant": false
+  },
+  {
+    "feature": "Fasting Blood Sugar",
+    "f_stat": 0.05038703730091241,
+    "p_value": 0.8223957606238766,
+    "significant": false
+  },
+  {
+    "feature": "CRP Level",
+    "f_stat": 0.3613454918014545,
+    "p_value": 0.5477735950518573,
+    "significant": false
+  },
+  {
+    "feature": "Homocysteine Level",
+    "f_stat": 0.6876604153873906,
+    "p_value": 0.4069811389419281,
+    "significant": false
+  }
+]

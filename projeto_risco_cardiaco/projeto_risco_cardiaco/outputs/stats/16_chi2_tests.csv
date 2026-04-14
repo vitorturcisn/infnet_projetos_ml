@@ -1,0 +1,4 @@
+pair,p_value,significant
+Smoking x Heart Disease Status,0.855909697726396,False
+Gender x Heart Disease Status,0.07022379461953385,False
+Diabetes x Heart Disease Status,0.9640990108979722,False

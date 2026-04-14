@@ -1,0 +1,29 @@
+# pipeline.yaml — Configuração de execução do Pipeline de Risco Cardíaco
+
+pipeline:
+  name: "cardiac-risk-prediction-pipeline"
+  version: "1.0.0"
+  description: "Pipeline de ingestão e processamento de dados para predição de risco cardíaco"
+
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  output_filename: "heart_disease.parquet"
+  features_data_dir: "data/features"
+  features_filename: "heart_disease_features.parquet"
+
+execution:
+  # Se o arquivo já estiver na pasta, ele pula o download (economiza tempo e internet)
+  skip_download_if_exists: true
+  # Se o Parquet já existir, pula a conversão
+  skip_ingest_if_exists: true
+  # Use estas chaves como true apenas quando quiser forçar uma atualização total
+  force_redownload: false
+  force_ingest: false
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s [%(levelname)s] %(name)s - %(message)s"
+  datefmt: "%Y-%m-%d %H:%M:%S"
+  log_to_file: true
+  log_file: "outputs/pipeline.log"

@@ -1,0 +1,28 @@
+{
+  "rows": 10000,
+  "columns": 21,
+  "memory_mb": 1.98,
+  "missing_values": {
+    "Age": 29,
+    "Gender": 0,
+    "Blood Pressure": 19,
+    "Cholesterol Level": 30,
+    "Exercise Habits": 0,
+    "Smoking": 0,
+    "Family Heart Disease": 0,
+    "Diabetes": 0,
+    "BMI": 22,
+    "High Blood Pressure": 0,
+    "Low HDL Cholesterol": 0,
+    "High LDL Cholesterol": 0,
+    "Alcohol Consumption": 0,
+    "Stress Level": 0,
+    "Sleep Hours": 25,
+    "Sugar Consumption": 0,
+    "Triglyceride Level": 26,
+    "Fasting Blood Sugar": 22,
+    "CRP Level": 26,
+    "Homocysteine Level": 20,
+    "Heart Disease Status": 0
+  }
+}

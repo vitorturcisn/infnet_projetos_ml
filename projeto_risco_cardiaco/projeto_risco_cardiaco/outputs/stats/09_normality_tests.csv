@@ -1,0 +1,10 @@
+feature,test,p_value,is_normal
+Age,shapiro,1.4080987454167188e-11,False
+Blood Pressure,shapiro,1.639708212597362e-11,False
+Cholesterol Level,shapiro,1.0208756249475033e-09,False
+BMI,shapiro,5.896777785008407e-11,False
+Sleep Hours,shapiro,2.8499827821170892e-11,False
+Triglyceride Level,shapiro,1.0543498511649508e-10,False
+Fasting Blood Sugar,shapiro,1.011202207560192e-11,False
+CRP Level,shapiro,5.876885310660119e-11,False
+Homocysteine Level,shapiro,1.5035773677556978e-11,False

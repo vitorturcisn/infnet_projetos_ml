@@ -9,17 +9,36 @@ import pandas as pd
 _NOME_MODELO: str = "cardiac-risk-best"
 _N_FOLDS_CV: int  = 5  # No nosso modeling.yaml usamos 5 folds
 
-def carregar_modelo(db_uri: str) -> mlflow.pyfunc.PyFuncModel:
+def carregar_modelo(db_uri: str, version: str | int | None = None) -> mlflow.pyfunc.PyFuncModel:
+    """
+    Carrega o modelo do MLflow Registry.
+    Se 'version' for informada (ex: 1), carrega essa versão específica.
+    Caso contrário, carrega a 'latest'.
+    """
     mlflow.set_tracking_uri(db_uri)
-    # Carrega a versão 'latest' (mais recente) registrada
-    return mlflow.pyfunc.load_model(f"models:/{_NOME_MODELO}/latest")
+    
+    # Lógica de seleção de versão
+    if version:
+        model_uri = f"models:/{_NOME_MODELO}/{version}"
+    else:
+        model_uri = f"models:/{_NOME_MODELO}/latest"
+        
+    return mlflow.pyfunc.load_model(model_uri)
 
 def prever_individual(features_df: pd.DataFrame, modelo: mlflow.pyfunc.PyFuncModel) -> dict:
-    # Retorna tanto a classe (0/1) quanto a probabilidade
+    """
+    Retorna tanto a classe (0/1) quanto a probabilidade.
+    Ajustado para lidar com wrappers do MLflow.
+    """
     classe = modelo.predict(features_df)[0]
     probabilidade = 0.0
+    
+    # Tenta obter a probabilidade (necessário para o nosso modelo 'desconfiado')
     if hasattr(modelo, "predict_proba"):
         probabilidade = modelo.predict_proba(features_df)[0][1]
+    elif hasattr(modelo, "_model_impl") and hasattr(modelo._model_impl, "predict_proba"):
+        probabilidade = modelo._model_impl.predict_proba(features_df)[0][1]
+        
     return {"classe": int(classe), "prob": float(probabilidade)}
 
 def obter_params_performance(db_uri: str) -> dict:

@@ -1,0 +1,100 @@
+"""
+modeling/ensemble.py — Construtor de modelos ensemble (Voting).
+"""
+from __future__ import annotations
+
+import logging
+from typing import Any
+
+import mlflow
+import optuna
+from sklearn.ensemble import VotingClassifier # Trocado de Regressor para Classifier
+
+from src.modeling.model_factory import construir_pipeline
+from src.modeling.cross_validation import CVRunner
+from src.modeling.metrics import agregar_metricas_folds
+from src.modeling.optimizer import _params_reducer_padrao
+
+
+class EnsembleBuilder:
+    def __init__(
+        self, ensembles_cfg: dict, cv_runner: CVRunner, pipe_cfg: dict, feat_red_cfg: dict,
+        n_trials_global: int = 10, seed: int = 42, logger: logging.Logger | None = None,
+    ) -> None:
+        self.ensembles_cfg   = ensembles_cfg
+        self.cv_runner       = cv_runner
+        self.pipe_cfg        = pipe_cfg
+        self.feat_red_cfg    = feat_red_cfg
+        self.n_trials_global = n_trials_global
+        self.seed            = seed
+        self.logger          = logger
+
+    def _construir_estimadores_base(self, top_n_entries: list[tuple]) -> list[tuple]:
+        return [
+            (nome, construir_pipeline(
+                model_cfg     =resultado['model_cfg'],
+                params_modelo =resultado['best_params'],
+                params_reducer=resultado.get('reducer_params', _params_reducer_padrao(self.feat_red_cfg)),
+                pipe_cfg      =self.pipe_cfg,
+            ))
+            for nome, resultado in top_n_entries
+        ]
+
+    def construir_voting(self, top_n_entries: list[tuple], X_train: Any, y_train: Any) -> dict | None:
+        cfg_voting = self.ensembles_cfg.get('voting', {})
+        if not cfg_voting.get('enabled', True):
+            if self.logger: self.logger.info('  [SKIP] Voting desabilitado no config')
+            return None
+
+        n_trials = cfg_voting.get('optuna_trials', self.n_trials_global)
+        w_low    = cfg_voting.get('weight_low', 1)
+        w_high   = cfg_voting.get('weight_high', 10)
+        nomes_base = [nome for nome, _ in top_n_entries]
+
+        if self.logger: self.logger.info('  [OPTUNA] voting    (%d trials) ...', n_trials)
+
+        with mlflow.start_run(run_name='optuna_voting', tags={'stage': 'optuna', 'model': 'voting'}):
+            def _objetivo_voting(trial: optuna.Trial) -> float:
+                pesos = [trial.suggest_int(f'w_{nome}', w_low, w_high) for nome in nomes_base]
+                voting = VotingClassifier( # Classifier!
+                    estimators=self._construir_estimadores_base(top_n_entries),
+                    voting='soft', # 'soft' usa predict_proba para pesar os votos (vital para AUC)
+                    weights=pesos,
+                    n_jobs=1,
+                )
+                fold_mets = self.cv_runner.executar(voting, X_train, y_train)
+                agg = agregar_metricas_folds(fold_mets)
+
+                with mlflow.start_run(run_name=f'voting_trial_{trial.number}', nested=True):
+                    mlflow.log_params({f'w_{n}': w for n, w in zip(nomes_base, pesos)})
+                    mlflow.log_metrics({'cv_roc_auc_mean': agg['cv_roc_auc_mean']})
+                return agg['cv_roc_auc_mean'] # Maximizar o AUC
+
+            estudo = optuna.create_study(direction='maximize', study_name='voting', sampler=optuna.samplers.TPESampler(seed=self.seed))
+            estudo.optimize(_objetivo_voting, n_trials=n_trials, catch=(Exception,))
+
+            try:
+                mlflow.log_params({f'best_{k}': v for k, v in estudo.best_params.items()})
+                mlflow.log_metric('best_cv_roc_auc', estudo.best_value)
+            except ValueError:
+                return None
+
+        melhores_pesos = [estudo.best_params[f'w_{nome}'] for nome in nomes_base]
+        melhor_voting  = VotingClassifier(
+            estimators=self._construir_estimadores_base(top_n_entries),
+            voting='soft', weights=melhores_pesos, n_jobs=1,
+        )
+        fold_mets_voting = self.cv_runner.executar(melhor_voting, X_train, y_train)
+        agg_voting       = agregar_metricas_folds(fold_mets_voting)
+
+        if self.logger:
+            self.logger.info('    Voting → CV ROC-AUC: %.4f ± %.4f', agg_voting['cv_roc_auc_mean'], agg_voting['cv_roc_auc_std'])
+
+        return {
+            **agg_voting,
+            'fold_metrics': fold_mets_voting,
+            'model_cfg'   : {'module': 'sklearn.ensemble', 'class': 'VotingClassifier', 'default_params': {}},
+            'best_params' : estudo.best_params,
+            'tuned'       : True,
+            '_instance'   : melhor_voting,
+        }

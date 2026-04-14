@@ -1,0 +1,84 @@
+# preprocessing.yaml — Configuração para Risco Cardíaco
+# Pipeline: data/processed/heart_disease.parquet -> data/features/heart_disease_features.parquet
+
+preprocessing:
+  output_dir: "data/features"
+  output_filename: "heart_disease_features.parquet"
+  compression: "snappy"
+
+# 1. Imputação (Blindagem Total contra NaNs)
+imputation:
+  # --- Numéricas: Usamos Mediana (Baseado na Seção 3 e 5 do EDA) ---
+  - columns: ["Age", "Blood Pressure", "Cholesterol Level", "BMI", "Sleep Hours", 
+              "Triglyceride Level", "Fasting Blood Sugar", "CRP Level", "Homocysteine Level"]
+    strategy: "median"
+
+  # --- Categórica Especial: Álcool (25.8% de nulos) ---
+  - columns: ["Alcohol Consumption"]
+    strategy: "constant"
+    fill_value: "Not Specified"
+
+  # --- Categóricas Gerais: Criamos a categoria "Unknown" ---
+  - columns: ["Gender", "Exercise Habits", "Smoking", "Family Heart Disease", 
+              "Diabetes", "High Blood Pressure", "Low HDL Cholesterol", 
+              "High LDL Cholesterol", "Stress Level", "Sugar Consumption"]
+    strategy: "constant"
+    fill_value: "Unknown"
+
+# 2. Flags Binárias (Zonas Críticas do EDA)
+binary_flags:
+  - column: "Blood Pressure"
+    value: 140
+    new_column: "is_hypertensive" 
+    inference_safe: true
+  - column: "BMI"
+    value: 30
+    new_column: "is_obese"
+    inference_safe: true
+
+# 3. Features de Razão (Ratios validados no EDA)
+ratio_features:
+  - name: "cholesterol_bmi_ratio"
+    numerator: "Cholesterol Level"
+    denominator: "BMI"
+  - name: "triglyceride_age_index"
+    numerator: "Triglyceride Level"
+    denominator: "Age"
+
+# 4. Transformação Logarítmica
+log_transform:
+  columns:
+    - "Triglyceride Level"
+    - "CRP Level"
+    - "Homocysteine Level"
+
+# 5. Interações (Capturando o risco de 24.8% da Seção 10)
+polynomial_features:
+  - name: "age_x_bmi"
+    columns: ["Age", "BMI"]
+
+# 6. Encoding Categórico
+# Nota: "Stress Level" gera a coluna "Stress Level_encoded" usada na seleção
+categorical_encoding:
+  columns: ["Gender", "Stress Level", "Exercise Habits", "Smoking", "Diabetes"]
+  one_hot_prefix: "cat"
+  drop_first: false
+
+# 7. Seleção Final (Baseado na Seção 14 do EDA Report)
+feature_selection:
+  target: "target_numeric"
+  features_to_keep:
+    - "Age"
+    - "BMI"
+    - "is_obese"
+    - "is_hypertensive"
+    - "cholesterol_bmi_ratio"
+    - "triglyceride_age_index"
+    - "age_x_bmi"
+    - "log_Triglyceride Level"
+    - "Stress Level_encoded"
+    - "cat_Gender_Male"
+    - "cat_Gender_Female"
+    - "cat_Smoking_Yes"
+    - "cat_Diabetes_Yes"
+    - "target_numeric"

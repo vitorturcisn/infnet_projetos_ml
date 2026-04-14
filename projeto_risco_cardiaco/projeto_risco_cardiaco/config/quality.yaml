@@ -1,0 +1,165 @@
+# quality.yaml — Configuração de Qualidade de Dados (Great Expectations)
+# Projeto: Risco Cardíaco
+#
+# Princípio MLOps: Separar política (este YAML) de mecanismo (código Python).
+# Este arquivo funciona como um "contrato de dados" baseado nas descobertas do EDA.
+
+quality:
+  suite_name: "cardiac_risk_quality_suite"
+  # Use false em desenvolvimento para ver os erros no relatório JSON sem crashar o código.
+  # Em produção, mude para true para barrar dados corrompidos.
+  fail_pipeline_on_error: false
+  output_dir: "outputs/quality"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Expectations de TABELA (Geometria e Schema do Dataset)
+# ─────────────────────────────────────────────────────────────────────────────
+table_expectations:
+
+  # O dataset de risco cardíaco original tem 10.000 linhas.
+  # Toleramos uma variação para testes futuros.
+  - type: expect_table_row_count_to_be_between
+    kwargs:
+      min_value: 5000
+      max_value: 15000
+
+  # Garante que o schema exato de 21 colunas brutas está presente.
+  # Protege contra mudanças no sistema fonte do hospital.
+  - type: expect_table_columns_to_match_set
+    kwargs:
+      column_set:
+        - "Age"
+        - "Gender"
+        - "Blood Pressure"
+        - "Cholesterol Level"
+        - "Exercise Habits"
+        - "Smoking"
+        - "Family Heart Disease"
+        - "Diabetes"
+        - "BMI"
+        - "High Blood Pressure"
+        - "Low HDL Cholesterol"
+        - "High LDL Cholesterol"
+        - "Alcohol Consumption"
+        - "Stress Level"
+        - "Sleep Hours"
+        - "Sugar Consumption"
+        - "Triglyceride Level"
+        - "Fasting Blood Sugar"
+        - "CRP Level"
+        - "Homocysteine Level"
+        - "Heart Disease Status"
+      exact_match: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Expectations de COLUNA (Baseadas na Seção 2 e 3 do EDA Report)
+# ─────────────────────────────────────────────────────────────────────────────
+column_expectations:
+
+  # ── Variável Alvo ──────────────────────────────────────────────────────────
+  "Heart Disease Status":
+    - type: expect_column_values_to_not_be_null
+    - type: expect_column_values_to_be_in_set
+      kwargs:
+        value_set: ["Yes", "No"]
+
+  # ── Numéricas Contínuas Principais ─────────────────────────────────────────
+  "Age":
+    # EDA mostrou 29 nulos (~0.3%). Toleramos até 1% de falha usando "mostly: 0.99"
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    # Range clínico validado no EDA:
+    - type: expect_column_values_to_be_between
+      kwargs:
+        min_value: 18
+        max_value: 100
+
+  "BMI":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_between
+      kwargs:
+        min_value: 10.0
+        max_value: 60.0    # EDA mostrou max de 40.0, deixamos margem segura
+
+  "Blood Pressure":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_between
+      kwargs:
+        min_value: 70
+        max_value: 250     # Range clínico realista (Sistólica)
+
+  "Cholesterol Level":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_between
+      kwargs:
+        min_value: 100
+        max_value: 500
+
+  "Triglyceride Level":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_between
+      kwargs:
+        min_value: 50
+        max_value: 800     # EDA mostrou max 400
+
+  "Sleep Hours":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_between
+      kwargs:
+        min_value: 0.0
+        max_value: 24.0
+
+  # ── Categóricas (Textos padronizados) ──────────────────────────────────────
+  "Gender":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_in_set
+      kwargs:
+        value_set: ["Male", "Female"]
+        mostly: 0.99  # Tolerância adicionada para strings vazias ("")
+
+  "Smoking":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_in_set
+      kwargs:
+        value_set: ["Yes", "No"]
+        mostly: 0.99  # Tolerância adicionada para strings vazias ("")
+
+  "Diabetes":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_in_set
+      kwargs:
+        value_set: ["Yes", "No"]
+        mostly: 0.99  # Tolerância adicionada para strings vazias ("")
+
+  "Stress Level":
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.99
+    - type: expect_column_values_to_be_in_set
+      kwargs:
+        value_set: ["Low", "Medium", "High"]
+        mostly: 0.99  # Tolerância adicionada para strings vazias ("")
+
+  # ── Caso Especial Crítico do EDA ───────────────────────────────────────────
+  "Alcohol Consumption":
+    # EDA: 25.8% de nulos. Logo, exigimos que apenas ~70% esteja preenchido.
+    - type: expect_column_values_to_not_be_null
+      kwargs:
+        mostly: 0.70
